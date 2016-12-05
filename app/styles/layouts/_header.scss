@@ -1,0 +1,72 @@
+#header {
+  margin-top: 30px;
+
+  .navbar-header {
+    .navbar-brand {
+      color: #fff;
+      height: auto;
+
+      img {
+        max-width: 40px;
+        float: left;
+      }
+
+      span {
+        float: left;
+        margin-top: 9px;
+        margin-left: 10px;
+        font-size: 17px;
+        font-weight: 200;
+      }
+    }
+  }
+
+  .nav {
+    margin-top: 15px;
+
+    li {
+      a {
+        color: #fff;
+        cursor: pointer;
+
+        input {
+          height: 25px;
+          border: 0;
+          border-radius: 0;
+          background: transparent;
+          box-shadow: none;
+          margin-top: -6px;
+          color: #fff;
+          font-weight: 200;
+        }
+
+        ::-webkit-input-placeholder {
+          color: #fff;
+          font-weight: 200;
+        }
+
+        :-moz-placeholder {
+          color: #fff;
+          font-weight: 200;
+        }
+
+        ::-moz-placeholder {
+          color: #fff;
+          font-weight: 200;
+        }
+
+        :-ms-input-placeholder {
+          color: #fff;
+          font-weight: 200;
+        }
+
+        &:active,
+        &:focus,
+        &:hover {
+          background: none;
+          outline: none;
+        }
+      }
+    }
+  }
+}

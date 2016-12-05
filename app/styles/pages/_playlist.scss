@@ -1,0 +1,56 @@
+.playlist {
+  margin-top: 30px;
+
+  table {
+    thead {
+      tr {
+        th {
+          border: 0;
+          padding: 12px;
+          font-weight: 500;
+          color: #fff;
+        }
+      }
+    }
+
+    td {
+      color: #e4e4e4;
+      font-weight: 200;
+    }
+
+    tbody {
+      background: rgba(28, 28, 31, 0.55);
+
+      tr {
+        td {
+          border-bottom: 0;
+          border-top: 1px solid #000;
+          vertical-align: middle;
+          padding: 12px;
+
+          span {
+            font-size: 25px;
+            opacity: 0;
+            cursor: pointer;
+            padding-left: 20px;
+            color: #909090;
+
+            &:hover {
+              color: #fff;
+            }
+          }
+        }
+
+        &:hover {
+          td {
+            background: rgb(28, 28, 31);
+
+            span {
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+  }
+}

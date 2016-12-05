@@ -1,0 +1,45 @@
+body.login-layout {
+  background-image: url('../images/login.jpg');
+  height: 100vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50%;
+
+  #header {
+    display: none;
+  }
+}
+
+.login-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(to left, rgba(229, 93, 135, 0.55) , #5FC3E4);
+
+  .login {
+    color: #fff;
+    text-align: center;
+
+    h2 {
+      font-size: 180px;
+      font-weight: 100;
+      margin: 0 0 10px;
+    }
+
+    h1 {
+      font-size: 150px;
+      font-weight: bold;
+      letter-spacing: -7px;
+      margin: 0 0 10px;
+    }
+
+    p {
+      margin: 0 0 10px;
+    }
+
+    .btn {
+      margin-top: 20px;
+    }
+  }
+}

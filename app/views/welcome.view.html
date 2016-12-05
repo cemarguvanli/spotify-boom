@@ -1,0 +1,24 @@
+<div class="container">
+  <h3 class="page-title">Playlists</h3>
+  <div class="list">
+    <div class="col-md-4 item-area" ng-repeat="item in currentUserPlayLists.items">
+      <a class="item" ng-href="#/playlist/{{item.owner.id}}/{{item.id}}">
+        <div class="cover">
+          <img ng-src={{item.images[0].url}} class="img-responsive" alt="">
+        </div>
+        <div class="desc">
+          <div class="play">
+            <span class="glyphicon glyphicon-play-circle"></span>
+          </div>
+          <h2 ng-bind="item.name"></h2>
+          <span><span ng-bind="item.tracks.total"></span> Songs</span>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-4 item-area">
+      <button class="more" ng-click="getCurrentUserPlaylists()" ng-if="showMoreButton">
+        More
+      </button>
+    </div>
+  </div>
+</div>

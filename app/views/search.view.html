@@ -1,0 +1,29 @@
+<div class="container">
+  <h3 class="page-title">{{q}}</h3>
+  <div class="col-md-12">
+    <p class="no-result" ng-if="tracks.items.length == 0">No result</p>
+    <div class="playlist" ng-if="tracks.items.length > 0">
+      <table class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Song</th>
+            <th>Artist</th>
+            <th>Album</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in tracks.items">
+            <td>
+              <span class="glyphicon glyphicon-play-circle"></span>
+            </td>
+            <td>{{item.name}}</td>
+            <td>{{item.artists[0].name}}</td>
+            <td>{{item.album.name}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="more" ng-disabled="!buttonLoading" ng-click="search()" ng-if="showMoreButton">More</button>
+    </div>
+  </div>
+</div>

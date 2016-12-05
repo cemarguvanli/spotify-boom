@@ -1,0 +1,16 @@
+<div class="login-area">
+  <div class="container">
+    <div class="login">
+      <h2>2016</h2>
+      <h1>Year in music</h1>
+      <p>Relieve the moments and the music that made 2016 one to remember</p>
+      <button
+        ng-click="login()"
+        class="btn btn-primary"
+        ng-disabled="loginLoadingButton"
+        ng-class="{ 'loading': loginLoadingButton }">
+        {{!loginLoadingButton ? 'Login' : ''}}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+.btn {
+  font-size: 18px;
+  border-radius: 500px;
+  border-width: 0;
+  letter-spacing: 1.2px;
+  min-width: 150px;
+  text-transform: uppercase;
+  white-space: normal;
+  padding: 10px 24px;
+  transition: background-color 0.15s ease,border-color 0.15s ease,color 0.15s ease;
+
+  &:active,
+  &:focus,
+  &:visited {
+    outline: 0;
+    background-color: $color-primary;
+  }
+}
+
+.btn.loading {
+  background-image: url("../images/loading.svg");
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: 30px;
+  min-height: 45px;
+}
+
+.btn-primary {
+  color: #FFF;
+  background-color: $color-primary;
+
+  &:hover {
+    background-color: $color-secondary;
+  }
+}

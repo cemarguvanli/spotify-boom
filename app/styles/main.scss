@@ -1,0 +1,83 @@
+$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/"; // bower:scss
+ @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
+ // endbower
+
+.browsehappy {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+$color-primary: #6207e3;
+$color-secondary: #1c1c1f;
+$color-wihte: #84bd00;
+$color-black: #121314;
+$color-gray: #919296;
+
+body {
+  font-family: 'Montserrat';
+  background: #E55D87;
+  background: -webkit-linear-gradient(to left, #E55D87 , #5FC3E4);
+  background: linear-gradient(to right, #491b10, #8a2a15, rgb(131, 40, 19), #98341e);
+}
+@import "components/_button.scss";
+@import "layouts/_header.scss";
+@import "pages/_login.scss";
+@import "pages/_welcome.scss";
+@import "pages/_playlist.scss";
+@import "pages/_search.scss";
+// Utils
+.more {
+  align-self: center;
+  width: 100px;
+  height: 100px;
+  line-height: 95px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  text-align: center;
+  margin: 35px auto;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 200;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background-color: transparent;
+  display: block;
+
+  &:active,
+  &:focus,
+  &:hover,
+  &:visited {
+    outline: none;
+  }
+}
+
+.page-title {
+  color: #fff;
+  font-size: 24px;
+  text-transform: uppercase;
+  padding-left: 15px;
+  margin-bottom: 0;
+  letter-spacing: 2px;
+  font-weight: 200;
+  text-shadow: 0 0 50px #000;
+}
+
+.no-result {
+  margin-top: 30px;
+  color: #fff;
+  font-size: 15px;
+  letter-spacing: 1px;
+  font-weight: 200;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+
+  &:active,
+  &:focus,
+  &:hover {
+    text-decoration: none;
+  }
+}
