@@ -30,5 +30,19 @@ angular.module('spotifyBoomApp')
       return api.post('users/' + userId + '/playlists', playlist);
     };
 
+    playlistService.removeTrackFromAPlaylist = function(userId, playlistId, track) {
+      console.log(userId, playlistId, track)
+      return api.delete('users/' + userId + '/playlists/' + playlistId + '/tracks', track);
+    };
+
+    playlistService.addTracksToAPlaylist = function(userId, playlistId, params) {
+      var uri = api.url+'users/' + userId + '/playlists/' + playlistId + '/tracks';
+      return $http({
+        method: 'POST',
+        url: uri,
+        params: params
+      });
+    };
+
     return playlistService;
   });

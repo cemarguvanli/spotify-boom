@@ -51,4 +51,30 @@ angular.module('spotifyBoomApp')
 
     $scope.getCurrentUserPlaylists();
 
+    $scope.newPlaylistName = ''
+    $scope.playlistPublic = true;
+
+    $scope.createPlayList = function() {
+      if (!$scope.newPlaylistName.length) {
+        alert('Please type a name');
+        return false;
+      }
+      var newPlaylist = {
+        name: $scope.newPlaylistName,
+        public: $scope.playlistPublic
+      }
+
+      PlaylistService.createPlayList($rootScope.currentUser.id, newPlaylist).success(function(res) {
+        $scope.currentUserPlayLists.items.unshift({
+          images: res.images,
+          owner: res.owner,
+          id: res.id,
+          name: res.name,
+          tracks: res.tracks
+        });
+        $scope.newPlaylistName = ''
+        $scope.openCreatePlaylist = false;
+      });
+    };
+
   });

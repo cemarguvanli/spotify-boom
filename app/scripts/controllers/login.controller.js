@@ -23,6 +23,8 @@ angular.module('spotifyBoomApp')
           $scope.loginLoadingButton = false;
           $location.path('/welcome');
         });
+      }, function() {
+        $scope.loginLoadingButton = false;
       });
     };
   });

@@ -2,27 +2,33 @@
 angular.module('spotifyBoomApp')
   .factory('api', function($http) {
 
-    var api = {};
-    var apiUrl = 'https://api.spotify.com/v1/';
+    var api = {
+      url: 'https://api.spotify.com/v1/'
+    };
 
     api.post = function(uri, data) {
       data = data || {};
-      return $http.post(apiUrl + uri, data);
+      return $http.post(api.url + uri, data);
     };
 
     api.get = function(uri, data) {
       data = data || {};
-      return $http.get(apiUrl + uri, data);
+      return $http.get(api.url + uri, data);
     };
 
     api.put = function(uri, data) {
       data = data || {};
-      return $http.put(apiUrl + uri, data);
+      return $http.put(api.url + uri, data);
     };
 
     api.delete = function(uri, data) {
       data = data || {};
-      return $http.delete(apiUrl + uri, data);
+      // return $http.delete(api.url + uri, data);
+      return $http({
+        method: 'DELETE',
+        url: api.url + uri,
+        data: data
+      });
     };
 
     return api;
@@ -48,14 +54,18 @@ angular.module('spotifyBoomApp')
           return response;
         },
         'responseError': function(response) {
+          console.log(response, 'error');
           if (response.data) {
-
+            if (response.status === 401) {
+                alert(response.data.error.message);
+                window.location.href = '#/';
+            }
           }
           return $q.reject(response);
         }
       };
     }];
-    
+
   }]).config(function($httpProvider) {
     $httpProvider.interceptors.push('myCSRF');
-  });
+  })

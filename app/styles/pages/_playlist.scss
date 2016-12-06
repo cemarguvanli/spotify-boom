@@ -19,7 +19,7 @@
     }
 
     tbody {
-      background: rgba(28, 28, 31, 0.55);
+      background: rgb(28, 28, 31);
 
       tr {
         td {
@@ -43,11 +43,21 @@
 
         &:hover {
           td {
-            background: rgb(28, 28, 31);
+            background: #4c4c4c;
 
             span {
               opacity: 1;
             }
+          }
+        }
+      }
+
+      .playing {
+        background: #4c4c4c;
+
+        td {
+          span {
+            opacity: 1;
           }
         }
       }

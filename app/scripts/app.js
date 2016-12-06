@@ -14,5 +14,6 @@ angular
     'ngCookies',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'ui.bootstrap.contextMenu'
   ]);

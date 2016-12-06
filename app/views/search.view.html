@@ -13,9 +13,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="item in tracks.items">
-            <td>
-              <span class="glyphicon glyphicon-play-circle"></span>
+          <tr context-menu="menuOptions"
+            ng-repeat="item in tracks.items track by $index"
+            class="{{trackCurrentIndex == $index ? 'playing' : ''}}">
+            <td ng-click="playPause($index)">
+              <span class="glyphicon {{trackCurrentIndex != $index ? 'glyphicon-play-circle' : 'glyphicon-pause'}}"></span>
             </td>
             <td>{{item.name}}</td>
             <td>{{item.artists[0].name}}</td>

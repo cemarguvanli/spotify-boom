@@ -1,24 +1,59 @@
 <div class="container">
-  <h3 class="page-title">Playlists</h3>
+  <h3 class="page-title">
+    <span>Playlists</span>
+    <button class="btn plus" ng-click="openCreatePlaylist = !openCreatePlaylist">
+      <span>Add New Playlist</span>
+      +
+    </button>
+  </h3>
   <div class="list">
     <div class="col-md-4 item-area" ng-repeat="item in currentUserPlayLists.items">
       <a class="item" ng-href="#/playlist/{{item.owner.id}}/{{item.id}}">
         <div class="cover">
-          <img ng-src={{item.images[0].url}} class="img-responsive" alt="">
+          <img ng-if="item.images[0].url" ng-src={{item.images[0].url}} class="img-responsive" alt="">
+          <img ng-if="!item.images[0].url" src="https://u.scdn.co/images/pl/default/1c3dbdea0959a875d55b056a5303123dd411d755" class="img-responsive" alt="">
         </div>
         <div class="desc">
           <div class="play">
             <span class="glyphicon glyphicon-play-circle"></span>
           </div>
           <h2 ng-bind="item.name"></h2>
-          <span><span ng-bind="item.tracks.total"></span> Songs</span>
+          <span>
+            <span ng-bind="item.tracks.total"></span>
+            Songs</span>
         </div>
       </a>
     </div>
     <div class="col-md-4 item-area">
-      <button class="more" ng-click="getCurrentUserPlaylists()" ng-if="showMoreButton">
-        More
-      </button>
+      <button class="more" ng-click="getCurrentUserPlaylists()" ng-if="showMoreButton">More</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade add-playlist-modal" id="addPlaylistModal" ng-show="openCreatePlaylist">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" ng-click="openCreatePlaylist = false">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      <h3>Add New Playlist</h3>
+      <form class="" ng-submit="createPlayList()">
+        <div class="form-group">
+          <input type="text" class="form-control" ng-model="newPlaylistName" placeholder="Name">
+        </div>
+        <span class="public-title">Public</span>
+        <div class="customSwitch" ng-class="{'off':!playlistPublic,'on':playlistPublic}" ng-click="playlistPublic = !playlistPublic">
+          <div class='cs-item' ng-class="{'on':!playlistPublic}">
+            <span class="cs-label yes">Yes</span>
+          </div>
+          <div class='cs-circle'></div>
+          <div class='cs-item' ng-class="{'on':playlistPublic}">
+            <span class="cs-label no">No</span>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+        <button class="btn btn-primary">Add Playlist</button>
+      </form>
     </div>
   </div>
 </div>
