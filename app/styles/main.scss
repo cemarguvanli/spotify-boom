@@ -16,9 +16,15 @@ $color-gray: #919296;
 
 body {
   font-family: 'Open Sans', sans-serif;
-  background: #E55D87;
-  background: -webkit-linear-gradient(to left, #E55D87 , #5FC3E4);
-  background: linear-gradient(to right, #491b10, #8a2a15, rgb(131, 40, 19), #98341e);
+  // background: #E55D87;
+  // background: -webkit-linear-gradient(to left, #E55D87 , #5FC3E4);
+  // background: linear-gradient(to right, #491b10, #8a2a15, rgb(131, 40, 19), #98341e);
+  background-image: url('../images/bg-op.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  min-height: 100vh;
+  padding-bottom: 60px;
 }
 @import "components/_button.scss";
 @import "layouts/_header.scss";
@@ -183,7 +189,8 @@ a {
       &:hover {
         background: rgb(64, 64, 66);
       }
-      &:focus{
+
+      &:focus {
         outline: none;
       }
     }
@@ -193,6 +200,98 @@ a {
     a {
       background: #636363;
       color: #9e9e9e;
+    }
+  }
+}
+
+input[type='range'] {
+  -webkit-appearance: none !important;
+  margin: 0;
+  padding: 0;
+  background: #b1b1b1;
+  height: 2px;
+  border-bottom: 0;
+  border-radius: 60px;
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+input[type='range']::-ms-fill-lower {
+  background: #b1b1b1;
+}
+
+input[type='range']::-ms-fill-upper {
+  background: #b1b1b1;
+}
+
+input[type='range']::-moz-range-track {
+  border: none;
+  background: #b1b1b1;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  background: #fff;
+  height: 11px;
+  width: 11px;
+  border-radius: 100%;
+  cursor: pointer;
+}
+
+input[type='range']::-moz-range-thumb {
+  background: #fff;
+  height: 11px;
+  width: 11px;
+  border-radius: 100%;
+  cursor: pointer;
+}
+
+input[type='range']::-ms-thumb {
+  -webkit-appearance: none !important;
+  background: #fff;
+  height: 11px;
+  width: 11px;
+  border-radius: 100%;
+  cursor: pointer;
+}
+
+.player-control {
+  position: fixed;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  left: 0;
+  right: 0;
+  width: 100%;
+  color: #fff;
+  padding: 20px 0;
+
+  .play-pause {
+    span {
+      font-size: 25px;
+      cursor: pointer;
+      color: #fff;
+      width: 45px;
+      height: 25px;
+      display: block;
+    }
+  }
+
+  .volume {
+    text-align: right;
+    margin-top: 12px;
+
+    input {
+      max-width: 100px;
+      float: left;
+    }
+
+    span {
+      float: left;
+      margin-top: -9px;
+      margin-right: 8px;
+      font-size: 18px;
     }
   }
 }

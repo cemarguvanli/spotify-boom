@@ -15,7 +15,11 @@ body.login-layout {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(to left, rgba(229, 93, 135, 0.55) , #5FC3E4);
+  // background: linear-gradient(to left, rgba(229, 93, 135, 0.55) , #5FC3E4);
+  background-image: url('../images/bg-op.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50%;
 
   .login {
     color: #fff;

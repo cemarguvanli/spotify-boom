@@ -3,31 +3,34 @@
 angular.module('spotifyBoomApp')
   .factory('Audio', function($rootScope) {
     var audioService = {};
-    var audio = new Audio();
+    audioService.audio = new Audio();
+    audioService.audio.volume = .5;
     audioService.playlist = [];
     audioService.playing = false;
     audioService.index = null;
 
     audioService.makePlaylist = function(list) {
+      if (audioService.playlist.length === 0) {
+        audioService.listener();
+      }
       audioService.playlist = list;
-      console.log(list)
     };
 
 
     audioService.play = function(index) {
-      if (audioService.index == index) {
-        audio.play();
-        return false;
-      }
       audioService.index = index;
       $rootScope.$broadcast('trackIndex:updated', audioService.index);
-      audio.src = audioService.getTrack(audioService.index);
-      audio.play();
-      audioService.listener();
+      audioService.audio.src = audioService.getTrack(audioService.index);
+      audioService.audio.pause();
+      setTimeout(function() {
+        if (audioService.audio.paused) {
+          audioService.audio.play();
+        }
+      }, 250);
     };
 
     audioService.listener = function() {
-      audio.addEventListener('ended', function() {
+      audioService.audio.addEventListener('ended', function() {
         if ((audioService.index + 1) === audioService.playlist.length) {
           audioService.playing = false;
           audioService.index = null;
@@ -38,26 +41,26 @@ angular.module('spotifyBoomApp')
         $rootScope.$broadcast('trackIndex:updated', audioService.index);
       }, false);
 
-      audio.addEventListener('play', function() {
+      audioService.audio.addEventListener('play', function() {
         audioService.playing = true;
       }, false);
 
-      audio.addEventListener('pause', function() {
+      audioService.audio.addEventListener('pause', function() {
         audioService.playing = false;
       }, false);
     };
 
     audioService.pause = function() {
-      audio.pause();
+      audioService.audio.pause();
     };
 
     audioService.next = function() {
       audioService.index++;
       audioService.index = (audioService.index >= audioService.playlist.length ? 0 : audioService.index);
-      audio.src = audioService.getTrack(audioService.index);
-      audio.play();
+      audioService.audio.src = audioService.getTrack(audioService.index);
+      audioService.audio.play();
       $rootScope.$broadcast('trackIndex:updated', audioService.index);
-      return audio.src
+      return audioService.audio.src
     };
 
     audioService.getTrack = function(index) {
@@ -70,6 +73,11 @@ angular.module('spotifyBoomApp')
 
     audioService.getCurrentIndex = function() {
       return audioService.index;
+    };
+
+    audioService.setVolume = function() {
+      var volume = document.getElementById("volume");
+      audioService.audio.volume = volume.value / 100
     };
 
     return audioService;

@@ -14,17 +14,17 @@ angular.module('spotifyBoomApp')
     $scope.loginLoadingButton = false;
 
     $scope.login = function() {
-      $scope.loginLoadingButton = true;
+      // $scope.loginLoadingButton = true;
       Authentication.login().then(function(res) {
         $cookies.put('token', res.access_token);
         UserService.getCurrentUser().success(function(res) {
           $rootScope.currentUser = res;
           $cookies.putObject('me', res);
-          $scope.loginLoadingButton = false;
+          // $scope.loginLoadingButton = false;
           $location.path('/welcome');
         });
       }, function() {
-        $scope.loginLoadingButton = false;
+        // $scope.loginLoadingButton = false;
       });
     };
   });

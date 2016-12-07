@@ -18,9 +18,19 @@ angular.module('spotifyBoomApp')
     $scope.goToSearch = function() {
       if ($scope.q.length) {
         $location.path('/search/' + $scope.q);
+      } else{
+        alert('Type a word');
       }
-
       return false;
+    };
+
+    $scope.copyToClipboard = function(text) {
+      var aux = document.createElement("input");
+      aux.setAttribute("value", text);
+      document.body.appendChild(aux);
+      aux.select();
+      document.execCommand("copy");
+      document.body.removeChild(aux);
     };
 
   });

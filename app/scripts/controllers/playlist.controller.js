@@ -9,7 +9,7 @@
  */
 angular.module('spotifyBoomApp')
   .controller('PlaylistController', function($scope, $rootScope, $routeParams, PlaylistService, Audio) {
-
+    $scope.volume = 50;
     $scope.showMoreButton = true;
     $scope.playlistTracks = {
       items: []
@@ -30,7 +30,7 @@ angular.module('spotifyBoomApp')
     var playlistId = $routeParams.playlistId;
     var userId = $routeParams.userId;
 
-    $scope.formatedPlayList = [];
+    $scope.formatedPlaylist = [];
 
     $scope.getPlaylistTracks = function() {
       params.offset += 10;
@@ -46,28 +46,48 @@ angular.module('spotifyBoomApp')
           $scope.playlistTracks.total = res.total;
 
           for (var i = 0; i < res.items.length; i++) {
-            $scope.playlistTracks.items.push(res.items[i]);
-            $scope.formatedPlayList.push({
-              track: $scope.playlistTracks.items[i].track.preview_url,
-              id: $scope.playlistTracks.items[i].track.id
-            });
+            if (res.items[i].track.preview_url !== null) {
+              $scope.playlistTracks.items.push(res.items[i]);
+              $scope.formatedPlaylist.push({
+                track: res.items[i].track.preview_url,
+                id: res.items[i].track.id
+              });
+            }
           }
 
           if (res.total <= $scope.playlistTracks.items.length) {
             $scope.showMoreButton = false;
           }
-          Audio.makePlaylist($scope.formatedPlayList);
+          Audio.makePlaylist($scope.formatedPlaylist);
         });
     };
 
     $scope.pause = function() {
+      Audio.audio.pause();
       $scope.trackCurrentIndex = null;
-      Audio.pause();
     };
 
-    $scope.playPause = function(index) {
-      $scope.trackCurrentIndex !== index ? Audio.play(index) : $scope.pause()
+    $scope.play = function(index) {
+      if (index === undefined) {
+        var index = 0;
+      }
+      Audio.play(index);
     };
+
+    $scope.setVolume = function() {
+      Audio.setVolume($scope.volume);
+      $scope.listenToVolume($scope.volume);
+    };
+
+    $scope.listenToVolume = function(volume) {
+      if (volume == 0) {
+        return 'glyphicon-volume-off';
+      } else if (volume < 50) {
+        return 'glyphicon-volume-down';
+      } else if (volume >= 50) {
+        return 'glyphicon-volume-up';
+      }
+    }
 
     $scope.getPlaylistTracks();
 
@@ -75,15 +95,6 @@ angular.module('spotifyBoomApp')
       PlaylistService.addTracksToAPlaylist(userId, playlistId, params).success(function(res) {
 
       });
-    };
-
-    function copyToClipboard(text) {
-      var aux = document.createElement("input");
-      aux.setAttribute("value", text);
-      document.body.appendChild(aux);
-      aux.select();
-      document.execCommand("copy");
-      document.body.removeChild(aux);
     };
 
     $scope.removeTrackFromAPlaylist = function(track) {
@@ -104,20 +115,21 @@ angular.module('spotifyBoomApp')
     // Context Menu
     $scope.menuOptions = [
       ['Remove from this Playlist', function($itemScope) {
+        console.log($itemScope)
         var track = {
-          index: 0,
+          index: $itemScope.$index,
           uri: $itemScope.item.track.uri
         };
+
         $scope.removeTrackFromAPlaylist(track);
       }, function($itemScope) {
         return userId === $rootScope.currentUser.id;
       }],
       ['Copy URL', function($itemScope) {
-        copyToClipboard($itemScope.item.track.external_urls.spotify);
+        $scope.copyToClipboard($itemScope.item.track.external_urls.spotify);
       }],
       ['Open On Spotify', function($itemScope) {
         window.open($itemScope.item.track.external_urls.spotify, '_blank');
-        copyToClipboard($itemScope.item.track.external_urls.spotify);
       }],
 
       null, ['Add to Playlist', [
@@ -129,7 +141,7 @@ angular.module('spotifyBoomApp')
 
     PlaylistService.getUserPlaylists($rootScope.currentUser.id).success(function(res) {
       $scope.listOfCurrentUserPlaylist = res;
-      angular.forEach($scope.listOfCurrentUserPlaylist.items, function(value, key) {
+      angular.forEach($scope.listOfCurrentUserPlaylist.items, function(value) {
         if (value.owner.id === $rootScope.currentUser.id) {
           $scope.menuOptions[$scope.menuOptions.length - 1][1].push([value.name, function($itemScope) {
             var params = {

@@ -36,7 +36,7 @@ angular.module('spotifyBoomApp')
     };
 
     playlistService.addTracksToAPlaylist = function(userId, playlistId, params) {
-      var uri = api.url+'users/' + userId + '/playlists/' + playlistId + '/tracks';
+      var uri = api.url + 'users/' + userId + '/playlists/' + playlistId + '/tracks';
       return $http({
         method: 'POST',
         url: uri,

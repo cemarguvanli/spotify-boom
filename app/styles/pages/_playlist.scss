@@ -34,10 +34,24 @@
             cursor: pointer;
             padding-left: 20px;
             color: #909090;
+            width: 45px;
+            height: 25px;
+            display: block;
 
             &:hover {
               color: #fff;
             }
+          }
+
+          span.glyphicon-play-circle {
+            visibility: hidden;
+            opacity: 0;
+          }
+
+          span.glyphicon-pause {
+            visibility: hidden;
+            opacity: 0;
+            display: none;
           }
         }
 
@@ -45,7 +59,8 @@
           td {
             background: #4c4c4c;
 
-            span {
+            span.glyphicon-play-circle {
+              visibility: visible;
               opacity: 1;
             }
           }
@@ -56,8 +71,23 @@
         background: #4c4c4c;
 
         td {
-          span {
+          span.glyphicon-play-circle {
+            visibility: hidden;
+            opacity: 0;
+            display: none;
+          }
+
+          span.glyphicon-pause {
+            visibility: visible;
             opacity: 1;
+            display: block;
+          }
+
+          &:hover {
+            span.glyphicon-play-circle {
+              visibility: hidden !important;
+              opacity: 0 !important;
+            }
           }
         }
       }

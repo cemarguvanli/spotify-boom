@@ -9,7 +9,7 @@
  */
 angular.module('spotifyBoomApp')
   .controller('SearchController', function($scope, $rootScope, $routeParams, SearchService, PlaylistService, Audio) {
-
+    $scope.volume = 50;
     $scope.showMoreButton = true;
     $scope.buttonLoading = true;
 
@@ -32,7 +32,7 @@ angular.module('spotifyBoomApp')
       offset: -10
     };
 
-    $scope.formatedPlayList = [];
+    $scope.formatedPlaylist = [];
 
     $scope.search = function() {
       params.offset += 10;
@@ -48,30 +48,51 @@ angular.module('spotifyBoomApp')
         $scope.tracks.total = res.tracks.total;
 
         for (var i = 0; i < res.tracks.items.length; i++) {
-          $scope.tracks.items.push(res.tracks.items[i]);
-          $scope.formatedPlayList.push({
-            track: $scope.tracks.items[i].preview_url,
-            id: $scope.tracks.items[i].id
-          });
+          if (res.tracks.items[i].preview_url !== null) {
+            $scope.tracks.items.push(res.tracks.items[i]);
+            $scope.formatedPlaylist.push({
+              track: res.tracks.items[i].preview_url,
+              id: res.tracks.items[i].id
+            });
+          }
         }
 
         if (res.tracks.total <= $scope.tracks.items.length) {
           $scope.showMoreButton = false;
         }
-        Audio.makePlaylist($scope.formatedPlayList)
+        Audio.makePlaylist($scope.formatedPlaylist);
       });
     };
 
     $scope.search();
 
     $scope.pause = function() {
+      Audio.audio.pause();
       $scope.trackCurrentIndex = null;
-      Audio.pause();
     };
 
-    $scope.playPause = function(index) {
-      $scope.trackCurrentIndex !== index ? Audio.play(index) : $scope.pause();
+    $scope.play = function(index) {
+      if (index === undefined) {
+        var index = 0;
+      }
+      Audio.play(index);
     };
+
+    // Player Control
+    $scope.setVolume = function() {
+      Audio.setVolume($scope.volume);
+      $scope.listenToVolume($scope.volume);
+    };
+
+    $scope.listenToVolume = function(volume) {
+      if (volume == 0) {
+        return 'glyphicon-volume-off';
+      } else if (volume < 50) {
+        return 'glyphicon-volume-down'
+      } else if (volume >= 50) {
+        return 'glyphicon-volume-up'
+      }
+    }
 
     $scope.addTracksToAPlaylist = function(userId, playlistId, params) {
       PlaylistService.addTracksToAPlaylist(userId, playlistId, params).success(function(res) {
@@ -79,23 +100,13 @@ angular.module('spotifyBoomApp')
       });
     }
 
-    function copyToClipboard(text) {
-      var aux = document.createElement("input");
-      aux.setAttribute("value", text);
-      document.body.appendChild(aux);
-      aux.select();
-      document.execCommand("copy");
-      document.body.removeChild(aux);
-    };
-
     // Context Menu
     $scope.menuOptions = [
       ['Copy URL', function($itemScope) {
-        copyToClipboard($itemScope.item.track.external_urls.spotify)
+        $scope.copyToClipboard($itemScope.item.external_urls.spotify)
       }],
       ['Open On Spotify', function($itemScope) {
-        window.open($itemScope.item.track.external_urls.spotify, '_blank');
-        copyToClipboard($itemScope.item.track.external_urls.spotify);
+        window.open($itemScope.item.external_urls.spotify, '_blank');
       }],
 
       null, ['Add to Playlist', [
@@ -112,7 +123,7 @@ angular.module('spotifyBoomApp')
           $scope.menuOptions[$scope.menuOptions.length - 1][1].push([value.name, function($itemScope) {
             var params = {
               position: 0,
-              uris: $itemScope.item.track.uri
+              uris: $itemScope.item.uri
             };
             $scope.addTracksToAPlaylist($rootScope.currentUser.id, value.id, params);
           }]);
