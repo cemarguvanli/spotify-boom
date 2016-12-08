@@ -7,6 +7,7 @@ angular.module('spotifyBoomApp')
     this.clientId = null;
     this.responseType = null;
     this.redirectUri = null;
+    this.scopes = null;
 
     this.setAuthToken = function(authToken) {
       this.authToken = authToken;
@@ -24,12 +25,17 @@ angular.module('spotifyBoomApp')
       this.redirectUri = redirectUri;
     };
 
+    this.setScopes = function(scopes) {
+      this.scopes = scopes;
+    };
+
     this.$get = function($q) {
       var self = this;
       var authToken = this.authToken;
       var clientId = this.clientId;
       var responseType = this.responseType;
       var redirectUri = this.redirectUri;
+      var scopes = this.scopes;
 
       return {
 
@@ -50,32 +56,51 @@ angular.module('spotifyBoomApp')
         },
 
         login: function() {
+
+          function openWindow(url, name, options, callback){
+            var win = window.open(url, name, options);
+            var interval = window.setInterval(function () {
+              try {
+                if (!win || win.closed) {
+                  window.clearInterval(interval);
+                  callback(win);
+                }
+              } catch (e) {}
+            }, 1000);
+          }
+
           var deferred = $q.defer();
+          var authCompleted = false;
           var width = 450,
               height = 730,
               left = (screen.width / 2) - (width / 2),
               top = (screen.height / 2) - (height / 2);
-
-          function getLoginURL(scopes) {
+          function getLoginURL() {
             return 'https://accounts.spotify.com/authorize?client_id=' + clientId +
               '&redirect_uri=' + encodeURIComponent(redirectUri) +
               '&scope=' + encodeURIComponent(scopes.join(' ')) +
               '&response_type=' + responseType;
           }
 
-          var url = getLoginURL(['']);
+          var url = getLoginURL();
 
           window.addEventListener('message', function(event) {
             var hash = JSON.parse(event.data);
             if (hash.type === 'access_token') {
               self.setAuthToken(hash.access_token);
               deferred.resolve(hash);
+              authCompleted = true;
             }
           }, false);
 
-          window.open(url,
+          openWindow(url,
             'Spotify',
-            'menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left
+            'menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left,
+            function () {
+              if (!authCompleted) {
+                deferred.reject();
+              }
+            }
           );
 
           return deferred.promise;

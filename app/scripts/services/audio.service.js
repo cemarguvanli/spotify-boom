@@ -2,6 +2,7 @@
 
 angular.module('spotifyBoomApp')
   .factory('Audio', function($rootScope) {
+
     var audioService = {};
     audioService.audio = new Audio();
     audioService.audio.volume = .5;
@@ -16,12 +17,37 @@ angular.module('spotifyBoomApp')
       audioService.playlist = list;
     };
 
+    audioService.playFromPlayer = function(){
+      var index = 0;
+
+      if (audioService.index !==  null) {
+        $rootScope.$broadcast('trackIndex:updated', audioService.index);
+        audioService.audio.play();
+        return false
+      }
+
+      $rootScope.$broadcast('trackIndex:updated', index);
+      audioService.audio.src = audioService.getTrack(index);
+      audioService.pause();
+      setTimeout(function() {
+        if (audioService.audio.paused) {
+          audioService.audio.play();
+        }
+      }, 250);
+    };
 
     audioService.play = function(index) {
+      if (index === null) {
+        audioService.audio.play();
+        return false;
+      } else if (index === 'player') {
+        audioService.playFromPlayer();
+        return false;
+      }
       audioService.index = index;
       $rootScope.$broadcast('trackIndex:updated', audioService.index);
       audioService.audio.src = audioService.getTrack(audioService.index);
-      audioService.audio.pause();
+      audioService.pause();
       setTimeout(function() {
         if (audioService.audio.paused) {
           audioService.audio.play();

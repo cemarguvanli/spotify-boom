@@ -10,8 +10,9 @@
 angular.module('spotifyBoomApp')
   .controller('SearchController', function($scope, $rootScope, $routeParams, SearchService, PlaylistService, Audio) {
     $scope.volume = 50;
+    $scope.helperIndex = null;
     $scope.showMoreButton = true;
-    $scope.buttonLoading = true;
+    $scope.buttonLoading = false;
 
     $scope.tracks = {
       items: []
@@ -20,6 +21,7 @@ angular.module('spotifyBoomApp')
     $scope.$on('trackIndex:updated', function(event, index) {
       $rootScope.$evalAsync(function() {
         $scope.trackCurrentIndex = index;
+        $scope.helperIndex = index;
       });
     });
 
@@ -33,13 +35,13 @@ angular.module('spotifyBoomApp')
     };
 
     $scope.formatedPlaylist = [];
-
+    var totalItems = 0;
     $scope.search = function() {
       params.offset += 10;
-      $scope.buttonLoading = false;
+      $scope.buttonLoading = true;
 
       SearchService.search(params).success(function(res) {
-        $scope.buttonLoading = true;
+        $scope.buttonLoading = false;
 
         $scope.tracks.href = res.tracks.href;
         $scope.tracks.next = res.tracks.next;
@@ -48,6 +50,7 @@ angular.module('spotifyBoomApp')
         $scope.tracks.total = res.tracks.total;
 
         for (var i = 0; i < res.tracks.items.length; i++) {
+          totalItems += 1;
           if (res.tracks.items[i].preview_url !== null) {
             $scope.tracks.items.push(res.tracks.items[i]);
             $scope.formatedPlaylist.push({
@@ -56,8 +59,7 @@ angular.module('spotifyBoomApp')
             });
           }
         }
-
-        if (res.tracks.total <= $scope.tracks.items.length) {
+        if (res.tracks.total <= totalItems) {
           $scope.showMoreButton = false;
         }
         Audio.makePlaylist($scope.formatedPlaylist);
@@ -72,8 +74,9 @@ angular.module('spotifyBoomApp')
     };
 
     $scope.play = function(index) {
-      if (index === undefined) {
-        var index = 0;
+      if ($scope.helperIndex === index) {
+        $scope.trackCurrentIndex = index;
+        var index = null;
       }
       Audio.play(index);
     };

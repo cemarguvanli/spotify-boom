@@ -8,7 +8,7 @@
  * Controller of the spotifyBoomApp
  */
 angular.module('spotifyBoomApp')
-  .controller('MainController', function($scope, $rootScope, $cookies, $location) {
+  .controller('MainController', function($scope, $rootScope, $cookies, $location, Audio) {
 
     $rootScope.bodyClassName = 'page-layout';
     $rootScope.currentUser = $cookies.getObject('me') || null;
@@ -18,7 +18,7 @@ angular.module('spotifyBoomApp')
     $scope.goToSearch = function() {
       if ($scope.q.length) {
         $location.path('/search/' + $scope.q);
-      } else{
+      } else {
         alert('Type a word');
       }
       return false;
@@ -32,5 +32,5 @@ angular.module('spotifyBoomApp')
       document.execCommand("copy");
       document.body.removeChild(aux);
     };
-
+    
   });

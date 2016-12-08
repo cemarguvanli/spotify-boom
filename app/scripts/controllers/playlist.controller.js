@@ -8,9 +8,13 @@
  * Controller of the spotifyBoomApp
  */
 angular.module('spotifyBoomApp')
-  .controller('PlaylistController', function($scope, $rootScope, $routeParams, PlaylistService, Audio) {
+  .controller('PlaylistController', function($scope, $rootScope, $routeParams, $interval, PlaylistService, Audio) {
     $scope.volume = 50;
+    $scope.helperIndex = null;
+
     $scope.showMoreButton = true;
+    $scope.buttonLoading = false;
+
     $scope.playlistTracks = {
       items: []
     };
@@ -18,9 +22,9 @@ angular.module('spotifyBoomApp')
     $scope.$on('trackIndex:updated', function(event, index) {
       $rootScope.$evalAsync(function() {
         $scope.trackCurrentIndex = index;
+        $scope.helperIndex = index;
       });
     });
-
 
     var params = {
       limit: 10,
@@ -31,14 +35,16 @@ angular.module('spotifyBoomApp')
     var userId = $routeParams.userId;
 
     $scope.formatedPlaylist = [];
-
+    var totalItems = 0;
     $scope.getPlaylistTracks = function() {
+      $scope.buttonLoading = true;
       params.offset += 10;
 
       PlaylistService
         .getPlaylistTracks(userId, playlistId, params)
         .success(function(res) {
 
+          $scope.buttonLoading = false;
           $scope.playlistTracks.href = res.href;
           $scope.playlistTracks.next = res.next;
           $scope.playlistTracks.offset = res.offset;
@@ -46,6 +52,7 @@ angular.module('spotifyBoomApp')
           $scope.playlistTracks.total = res.total;
 
           for (var i = 0; i < res.items.length; i++) {
+            totalItems += 1;
             if (res.items[i].track.preview_url !== null) {
               $scope.playlistTracks.items.push(res.items[i]);
               $scope.formatedPlaylist.push({
@@ -54,8 +61,7 @@ angular.module('spotifyBoomApp')
               });
             }
           }
-
-          if (res.total <= $scope.playlistTracks.items.length) {
+          if (res.total <= totalItems) {
             $scope.showMoreButton = false;
           }
           Audio.makePlaylist($scope.formatedPlaylist);
@@ -63,15 +69,17 @@ angular.module('spotifyBoomApp')
     };
 
     $scope.pause = function() {
-      Audio.audio.pause();
+      Audio.pause();
       $scope.trackCurrentIndex = null;
     };
 
     $scope.play = function(index) {
-      if (index === undefined) {
-        var index = 0;
+      if ($scope.helperIndex === index) {
+        $scope.trackCurrentIndex = index;
+        var index = null;
       }
       Audio.play(index);
+      $scope.currentTime = Audio.audio.currentTime;
     };
 
     $scope.setVolume = function() {
@@ -115,7 +123,6 @@ angular.module('spotifyBoomApp')
     // Context Menu
     $scope.menuOptions = [
       ['Remove from this Playlist', function($itemScope) {
-        console.log($itemScope)
         var track = {
           index: $itemScope.$index,
           uri: $itemScope.item.track.uri

@@ -27,9 +27,10 @@
         </tbody>
       </table>
       <button class="more" ng-disabled="buttonLoading" ng-click="getPlaylistTracks()" ng-if="showMoreButton">More</button>
+      <!-- <button class="more" ng-disabled="!buttonLoading" ng-click="search()" ng-if="showMoreButton">More</button> -->
       <div class="player-control" ng-if="playlistTracks.items.length > 0">
         <div class="play-pause col-md-4">
-          <span ng-click="play()" ng-if="trackCurrentIndex == null" class="glyphicon glyphicon-play-circle"></span>
+          <span ng-click="play('player')" ng-if="trackCurrentIndex == null" class="glyphicon glyphicon-play-circle"></span>
           <span ng-click="pause()" ng-if="trackCurrentIndex != null" class="glyphicon glyphicon-pause"></span>
         </div>
         <div class="col-md-6">
